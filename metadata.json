@@ -1,0 +1,5 @@
+{
+  "name": "MoneiControl",
+  "description": "Controle financeiro simples, moderno e premium com registro por voz.",
+  "requestFramePermissions": ["microphone"]
+}

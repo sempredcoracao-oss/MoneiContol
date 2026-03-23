@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         (request.auth.token.email == "joice.nuno.thiago@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'isPremium', 'role']) &&
+             data.uid is string &&
+             data.email is string &&
+             data.isPremium is bool &&
+             data.role in ['admin', 'user'] &&
+             (!('displayName' in data) || data.displayName is string) &&
+             (!('premiumExpiration' in data) || data.premiumExpiration is string);
+    }
+
+    function isValidTransaction(data) {
+      return data.keys().hasAll(['uid', 'title', 'amount', 'type', 'category', 'date']) &&
+             data.uid == request.auth.uid &&
+             data.title is string && data.title.size() < 100 &&
+             data.amount is number &&
+             data.type in ['income', 'expense'] &&
+             data.category is string &&
+             data.date is string;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin(); // Allow admins to search users
+      
+      // Users can create their own profile as 'user' role only
+      allow create: if isOwner(userId) && 
+                      isValidUser(request.resource.data) && 
+                      (request.resource.data.role == 'user' || isAdmin()) &&
+                      (request.resource.data.isPremium == false || isAdmin());
+      
+      // Only admins can update premium status or roles
+      allow update: if (isAdmin() && isValidUser(request.resource.data)) || 
+                      (isOwner(userId) && 
+                       isValidUser(request.resource.data) &&
+                       request.resource.data.isPremium == resource.data.isPremium &&
+                       request.resource.data.role == resource.data.role);
+    }
+
+    match /transactions/{transactionId} {
+      allow read: if isAuthenticated() && resource.data.uid == request.auth.uid;
+      allow create: if isAuthenticated() && isValidTransaction(request.resource.data);
+      allow update: if isAuthenticated() && 
+                      resource.data.uid == request.auth.uid && 
+                      isValidTransaction(request.resource.data);
+      allow delete: if isAuthenticated() && resource.data.uid == request.auth.uid;
+    }
+  }
+}

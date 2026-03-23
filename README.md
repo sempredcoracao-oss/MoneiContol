@@ -1,83 +1,20 @@
-# 💰 MoneiControl
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Um aplicativo simples e inteligente para controle de despesas diárias, com registro por voz ou digitação.
+# Run and deploy your AI Studio app
 
----
+This contains everything you need to run your app locally.
 
-## 🚀 Sobre o projeto
+View your app in AI Studio: https://ai.studio/apps/58c14b3c-068c-4f0b-99d7-976a490c7054
 
-O MoneiControl foi criado para ajudar pessoas a controlarem suas finanças de forma rápida e prática, sem planilhas complicadas.
+## Run Locally
 
-Com ele, você pode apenas falar ou digitar seus gastos e receitas, e o app organiza tudo automaticamente.
+**Prerequisites:**  Node.js
 
----
 
-## ✨ Funcionalidades
-
-- 🎤 Registro de despesas por voz
-- ⌨️ Registro manual por digitação
-- 📊 Relatórios simples e claros
-- 🔒 Controle de acesso (plano gratuito e premium)
-- ☁️ Sincronização com banco de dados online
-- 👤 Login com Google
-
----
-
-## 💎 Plano Premium
-
-O plano premium oferece:
-
-- Uso ilimitado
-- Relatórios completos
-- Controle financeiro avançado
-- Backup seguro
-
----
-
-## 💳 Pagamento
-
-O acesso premium é liberado após pagamento via Mercado Pago.
-
----
-
-## 📲 Como usar
-
-1. Acesse o aplicativo
-2. Faça login com sua conta Google
-3. Registre suas despesas por voz ou digitando
-4. Acompanhe seus gastos
-
----
-
-## 📞 Suporte
-
-Para dúvidas ou envio de comprovante:
-
-WhatsApp: +55 15 99751-6202
-
----
-
-## 🌐 Acesse o app
-
-👉 (COLE AQUI O LINK DO SEU APP)
-
----
-
-## 🛠️ Tecnologias utilizadas
-
-- Firebase
-- Autenticação Google
-- Banco de dados em nuvem
-- Inteligência artificial para processamento de texto
-
----
-
-## 📌 Status do projeto
-
-🚀 Em desenvolvimento e evolução constante
-
----
-
-## 👩‍💼 Criado por
-
-Joice Lourenço
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
